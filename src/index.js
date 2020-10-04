@@ -68,7 +68,9 @@ class App extends Component {
     super(props)
     this.state = {
       jsonChangeTimer: null,
-      jsonToForm: model
+      jsonToForm: model,
+      isJsonValid: true,
+      errorMessage: ''
     }
   }
 
@@ -85,19 +87,24 @@ class App extends Component {
       try {
         json = JSON.parse(jsonText)
       }
-      catch {
-        // TODO Report error
+      catch (e) {
+        this.setState({ isJsonValid: false, errorMessage: 'Parse error' })
         return
       }
 
       this.setState({
-        jsonToForm: json
+        jsonToForm: json,
+        errorMessage: '',
+        isJsonValid: true
       })
     }, JSON_CHANGE_DEBOUNCE_TIME);
 
     this.setState({
       jsonChangeTimer: jsonChangeTimer
     })
+  }
+
+  setError(errorMessage) {
   }
 
   renderEditor() {
@@ -108,22 +115,34 @@ class App extends Component {
     console.log(params);
   }
 
+  getClassNamesForEditPane() {
+    let classString = 'paneContent'
+    if (!this.state.isJsonValid) {
+      classString += ' errorPaneContent'
+    }
+    return classString
+  }
+
   render() {
     return (
       <div>
         <h1 className='title'>
           json-reactform Playground
       </h1>
-        <div className='paneContainer'>
-          <div className="pane editPane">
-            {this.renderEditor()}
+        <div className='content'>
+          <div className="pane">
+            {/* <div className='errorMessage'>{this.state.errorMessage}</div> */}
+            <div className={this.getClassNamesForEditPane()}>
+              {this.renderEditor()}
+            </div>
           </div>
-          <div className="pane resultPane">
-            <JsonToForm model={this.state.jsonToForm} onSubmit={this.submit} />
+          <div className="pane">
+            <div className="paneContent">
+              <JsonToForm model={this.state.jsonToForm} onSubmit={this.submit} />
+            </div>
           </div>
         </div>
       </div>
-
     )
   }
 }

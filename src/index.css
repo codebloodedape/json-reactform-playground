@@ -7,7 +7,7 @@ body {
     text-align: center;
 }
 
-.paneContainer {
+.content {
     display: flex;
     justify-content: space-around;
     align-items: center;
@@ -16,23 +16,32 @@ body {
 
 .pane {
     width: 40%;
-    background: #fff;
-    padding: 20px;
-    height: 800px;
-    border: 1px solid;
-    border-radius: 5px;
 }
 
-.editPane {
+.paneContent {
+    border: 1px solid black;
+    border-radius: 5px;
+    height: 800px;
+    width: 100%;
+    background: #fff;
+    padding: 20px;
+    margin: 3px;
+}
+
+.errorPaneContent {
+    border: 3px solid red;
+    margin: 0;
+}
+
+.errorMessage {
+    position: relative;
+    top: -20px; 
 }
 
 .editor {
     height: 100%;
     width: 100%;
-    border: none;
-    outline: none;
     resize: none;
-}
-
-.resultPane {
+    outline: none;
+    border: none;
 }
