@@ -16,16 +16,45 @@ body {
 
 .pane {
     width: 40%;
+    position: relative;
+    height: 800px;
+}
+
+.leftPane {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.friendlyEditor {
+    height: 50%;
+}
+
+.editorContainer {
+    position: relative;
+    height: 50%;
+    width: 100%;
+}
+
+.errorMessage {
+    position: absolute;
+    height: 5%;
+    width: 100%;
 }
 
 .paneContent {
     border: 1px solid black;
     border-radius: 5px;
-    height: 800px;
     width: 100%;
     background: #fff;
     padding: 20px;
     margin: 3px;
+}
+
+.editorPaneContent {
+    position: absolute;
+    top: 20px;
+    height: 95%;
 }
 
 .errorPaneContent {
@@ -33,9 +62,8 @@ body {
     margin: 0;
 }
 
-.errorMessage {
-    position: relative;
-    top: -20px; 
+.resultPaneContent {
+    height: 800px;
 }
 
 .editor {

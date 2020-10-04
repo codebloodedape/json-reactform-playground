@@ -116,7 +116,7 @@ class App extends Component {
   }
 
   getClassNamesForEditPane() {
-    let classString = 'paneContent'
+    let classString = 'paneContent editorPaneContent'
     if (!this.state.isJsonValid) {
       classString += ' errorPaneContent'
     }
@@ -131,13 +131,18 @@ class App extends Component {
       </h1>
         <div className='content'>
           <div className="pane">
-            {/* <div className='errorMessage'>{this.state.errorMessage}</div> */}
-            <div className={this.getClassNamesForEditPane()}>
-              {this.renderEditor()}
+            <div className='leftPane'>
+              <div className="friendlyEditor paneContent"></div>
+              <div className="editorContainer">
+                <div className='errorMessage'>{this.state.errorMessage}</div>
+                <div className={this.getClassNamesForEditPane()}>
+                  {this.renderEditor()}
+                </div>
+              </div>
             </div>
           </div>
           <div className="pane">
-            <div className="paneContent">
+            <div className="paneContent resultPaneContent">
               <JsonToForm model={this.state.jsonToForm} onSubmit={this.submit} />
             </div>
           </div>
