@@ -40,6 +40,7 @@ body {
     position: absolute;
     height: 5%;
     width: 100%;
+    color: red;
 }
 
 .paneContent {
