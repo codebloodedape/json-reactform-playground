@@ -92,7 +92,8 @@ class App extends Component {
         elementProps: {
 
         }
-      }
+      },
+      reload: false
     }
   }
 
@@ -162,13 +163,22 @@ class App extends Component {
   onAddElement = () => {
     let jsonToForm = this.state.jsonToForm
     jsonToForm[this.state.editJson.name] = this.state.editJson.elementProps
-    this.setState({
-      showAddElementModel: false,
-      jsonToForm: jsonToForm,
-      jsonToFormString: JSON.stringify(jsonToForm, null, 2),
-      isJsonValid: true,
-      errorMessage: ''
-    })
+    this.setState(
+      {
+        reload: true
+      }, () => {
+        this.setState(
+          {
+            showAddElementModel: false,
+            jsonToForm: jsonToForm,
+            jsonToFormString: JSON.stringify(jsonToForm, null, 2),
+            isJsonValid: true,
+            errorMessage: '',
+            reload: false
+          }
+        )
+
+      })
   }
 
   onAddElementClose = () => {
@@ -206,10 +216,10 @@ class App extends Component {
       case 'select':
         // editJson.defaultValue
         editJson.elementProps.options = [
-          {'value': '1', 'label': 'item 1'},
-          {'value': '2', 'label': 'item 2'}
+          { 'value': '1', 'label': 'item 1' },
+          { 'value': '2', 'label': 'item 2' }
         ]
-        break;
+        break
       case 'checkbox':
         editJson.elementProps["options"] = [ //use static json arry to get options
           {
@@ -221,7 +231,19 @@ class App extends Component {
             "label": "Checkbox 2"
           }
         ]
-        break;
+        break
+      case 'radio':
+        editJson.elementProps.options = [ //use static json arry to get options
+          {
+            "value": "completed",
+            "label": "Completed"
+          },
+          {
+            "value": "not_completed",
+            "label": "Not Completed"
+          }
+        ]
+        break
     }
     this.setState({ editJson: editJson });
   }
@@ -291,6 +313,7 @@ class App extends Component {
               <option value="select">Select</option>
               <option value="checkbox">Checkbox</option>
               <option value="radio">Radio</option>
+              <option value="submit">Submit</option>
             </select>
           </label>
           <br />
@@ -404,6 +427,9 @@ class App extends Component {
   }
 
   renderResultPane() {
+    if (this.state.reload) {
+      return null
+    }
     return (
       <div className="pane resultPane">
         <div className="paneHeader"> <h2 >Result</h2></div>
