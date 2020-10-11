@@ -5,60 +5,60 @@ import Modal from 'react-modal';
 import './index.css'
 
 const model = {
-  "Plan Date": {
-    "type": "date",
-    "format": "dd MMMM yyyy",
-    "required": true
-  },
-  "Qty": {
-    "type": "number",
-    "required": true
-  },
-  "Item Number": {
-    "type": "select",
-    "required": true,
-    "options": [ //use static json arry to get options
-      {
-        "value": "1",
-        "label": "item 1"
-      },
-      {
-        "value": "2",
-        "label": "item 2"
-      }
-    ],
-  },
-  "Parts": {
-    "type": "checkbox",
-    "required": true,
-    "options": [ //use static json arry to get options
-      {
-        "value": "checkbox_item_1",
-        "label": "Checkbox 1"
-      },
-      {
-        "value": "checkbox_item_2",
-        "label": "Checkbox 2"
-      }
-    ],
-  },
-  "Status": {
-    "type": "radio",
-    "required": true,
-    "options": [ //use static json arry to get options
-      {
-        "value": "completed",
-        "label": "Completed"
-      },
-      {
-        "value": "not_completed",
-        "label": "Not Completed"
-      }
-    ],
-  },
-  "Save": { // button submit
-    "type": "submit",
-  }
+  // "Plan Date": {
+  //   "type": "date",
+  //   "format": "dd MMMM yyyy",
+  //   "required": true
+  // },
+  // "Qty": {
+  //   "type": "number",
+  //   "required": true
+  // },
+  // "Item Number": {
+  //   "type": "select",
+  //   "required": true,
+  //   "options": [ //use static json arry to get options
+  //     {
+  //       "value": "1",
+  //       "label": "item 1"
+  //     },
+  //     {
+  //       "value": "2",
+  //       "label": "item 2"
+  //     }
+  //   ],
+  // },
+  // "Parts": {
+  //   "type": "checkbox",
+  //   "required": true,
+  //   "options": [ //use static json arry to get options
+  //     {
+  //       "value": "checkbox_item_1",
+  //       "label": "Checkbox 1"
+  //     },
+  //     {
+  //       "value": "checkbox_item_2",
+  //       "label": "Checkbox 2"
+  //     }
+  //   ],
+  // },
+  // "Status": {
+  //   "type": "radio",
+  //   "required": true,
+  //   "options": [ //use static json arry to get options
+  //     {
+  //       "value": "completed",
+  //       "label": "Completed"
+  //     },
+  //     {
+  //       "value": "not_completed",
+  //       "label": "Not Completed"
+  //     }
+  //   ],
+  // },
+  // "Save": { // button submit
+  //   "type": "submit",
+  // }
 }
 
 const addElementModelCustomStyles = {
@@ -76,8 +76,6 @@ const addElementModelCustomStyles = {
   }
 };
 
-const JSON_CHANGE_DEBOUNCE_TIME = 800
-
 class App extends Component {
 
   constructor(props) {
@@ -89,7 +87,12 @@ class App extends Component {
       isJsonValid: true,
       errorMessage: '',
       showAddElementModel: false,
-      editJson: {}
+      editJson: {
+        name: '',
+        elementProps: {
+
+        }
+      }
     }
   }
 
@@ -106,7 +109,8 @@ class App extends Component {
   }
 
   onElementClick = (elementName) => {
-    let editJson = this.state.jsonToForm[elementName]
+    let editJson = {}
+    editJson.elementProps = this.state.jsonToForm[elementName]
     editJson.name = elementName
     this.setState({
       editJson: editJson,
@@ -114,10 +118,28 @@ class App extends Component {
     })
   }
 
+  onElementDelete = (elementName) => {
+    let jsonToForm = this.state.jsonToForm
+    delete jsonToForm[elementName]
+    this.setState({
+      jsonToForm: jsonToForm,
+      jsonToFormString: JSON.stringify(jsonToForm, null, 2)
+    })
+  }
+
   renderElementsFromJson() {
     let elementsName = []
     for (let elementName in this.state.jsonToForm) {
-      elementsName.push(<div className={'elementName'} onClick={() => this.onElementClick(elementName)}>{elementName}</div>)
+      elementsName.push(
+        <div className={'elementName'} title='Edit Element' onClick={() => this.onElementClick(elementName)}>
+          {elementName}
+          <div title='Delete element' onClick={(e) => {
+            this.onElementDelete(elementName)
+            e.stopPropagation()
+          }}
+            className='elementDeleteButton'>x</div>
+        </div>
+      )
     }
     return elementsName
   }
@@ -128,16 +150,18 @@ class App extends Component {
       showAddElementModel: true,
       editJson: {
         name: '',
-        type: 'text',
-        required: true,
-        disabled: false
+        elementProps: {
+          type: 'text',
+          required: true,
+          disabled: false
+        }
       }
     })
   }
 
   onAddElement = () => {
     let jsonToForm = this.state.jsonToForm
-    jsonToForm[this.state.editJson.name] = this.state.editJson
+    jsonToForm[this.state.editJson.name] = this.state.editJson.elementProps
     this.setState({
       showAddElementModel: false,
       jsonToForm: jsonToForm,
@@ -162,51 +186,68 @@ class App extends Component {
   onElementTypeChange = (event) => {
     let editJson = {
       name: this.state.editJson.name,
-      type: event.target.value,
-      required: true,
-      disabled: false
+      elementProps: {
+        type: event.target.value,
+        required: true,
+      }
     }
-    switch (editJson.type) {
+    switch (editJson.elementProps.type) {
       case 'text':
       case 'number':
       case 'textarea':
         // editJson.defaultValue = ''
-        editJson.placeHolder = ''
+        editJson.elementProps.placeHolder = ''
         break
       case 'date':
         // editJson.defaultValue = new Date()
-        editJson.placeHolder = null
-        editJson.format = ''
+        editJson.elementProps.placeHolder = null
+        editJson.elementProps.format = ''
+        break;
       case 'select':
         // editJson.defaultValue
-        editJson.placeHolder = ''
-        editJson.createable = 'true'
+        editJson.elementProps.options = [
+          {'value': '1', 'label': 'item 1'},
+          {'value': '2', 'label': 'item 2'}
+        ]
+        break;
+      case 'checkbox':
+        editJson.elementProps["options"] = [ //use static json arry to get options
+          {
+            "value": "checkbox_item_1",
+            "label": "Checkbox 1"
+          },
+          {
+            "value": "checkbox_item_2",
+            "label": "Checkbox 2"
+          }
+        ]
+        break;
     }
     this.setState({ editJson: editJson });
   }
 
   onRequiredChange = (event) => {
     let editJson = this.state.editJson
-    editJson.required = event.target.value === 'true' ? true : false
+    editJson.elementProps.required = event.target.value === 'true' ? true : false
     this.setState({ editJson: editJson });
 
   }
 
   onDisabledChange = (event) => {
     let editJson = this.state.editJson
-    editJson.disabled = event.target.value === 'true' ? true : false
+    editJson.elementProps.disabled = event.target.value === 'true' ? true : false
     this.setState({ editJson: editJson })
   }
 
   onDefaultValueChange = (event) => {
     let editJson = this.state.editJson
-    editJson.defaultValue = event.target.value
+    editJson.elementProps.defaultValue = event.target.value
     this.setState({ editJson: editJson });
   }
 
   onPlaceHolderChange = (event) => {
     let editJson = this.state.editJson
-    editJson.placeHolder = event.target.value
+    editJson.elementProps.placeHolder = event.target.value
     this.setState({ editJson: editJson });
 
   }
@@ -214,17 +255,17 @@ class App extends Component {
   renderVisualEditor() {
     let editJson = this.state.editJson
 
-    let placeHolderElement = editJson.placeHolder !== null ? (
+    let placeHolderElement = editJson.elementProps.placeHolder !== null ? (
       <label>
         Place Holder
-        <input type='text' onChange={this.onPlaceHolderChange} value={editJson.placeHolder}></input>
+        <input type='text' onChange={this.onPlaceHolderChange} value={editJson.elementProps.placeHolder}></input>
       </label>
     ) : null
 
     return (
       <div>
         {this.renderElementsFromJson()}
-        <div className="elementName" onClick={this.onAddElementClick}>Add Item</div>
+        <div className="elementName" onClick={this.onAddElementClick}>Add Element</div>
         <Modal
           isOpen={this.state.showAddElementModel}
           contentLabel="Minimal Modal Example"
@@ -237,12 +278,12 @@ class App extends Component {
           </div>
           <label>
             Name
-            <input type='text' onChange={this.onElementNameChange} defaultValue='' value={editJson.name}></input>
+            <input type='text' onChange={this.onElementNameChange} value={editJson.name}></input>
           </label>
           <br />
           <label>
             Element Type
-          <select defaultValue='text' value={editJson.type} onChange={this.onElementTypeChange}>
+          <select value={editJson.elementProps.type} onChange={this.onElementTypeChange}>
               <option value="text">Text</option>
               <option value="number">Number</option>
               <option value="textarea">Textarea</option>
@@ -255,7 +296,7 @@ class App extends Component {
           <br />
           <label>
             Required
-          <select value={editJson.required} defaultValue='true' onChange={this.onRequiredChange}>
+          <select value={editJson.elementProps.required} onChange={this.onRequiredChange}>
               <option value='true'>True</option>
               <option value="false">False</option>
             </select>
@@ -263,7 +304,7 @@ class App extends Component {
           <br />
           <label>
             Disabled
-          <select value={editJson.disabled} defaultValue='false' onChange={this.onDisabledChange}>
+          <select value={editJson.elementProps.disabled} onChange={this.onDisabledChange}>
               <option value='true'>True</option>
               <option value="false">False</option>
             </select>
