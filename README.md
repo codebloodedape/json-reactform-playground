@@ -1,10 +1,10 @@
 # json-reactform-playground
 A playground for json-reactform
 
-# Build
+# Install Dependencies
 Run 'npm install'
 
-# Run
+# Build and Run
 Run 'npm start'
 
 # Deploy

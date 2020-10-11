@@ -1,5 +1,5 @@
 body {
-    background: yellow;
+    background: #00ff89;
     font-family: "Lucida Console", Courier, monospace;
 }
 
@@ -9,68 +9,108 @@ body {
 
 .content {
     display: flex;
-    justify-content: space-around;
-    align-items: center;
     width: 100%;
+    height: 800px;
+}
+
+.subcontent {
+    width: 50%;
+}
+
+.leftSubcontent {
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
 }
 
 .pane {
-    width: 40%;
-    position: relative;
-    height: 800px;
+    margin: 10px;
+    height: 40%;
 }
 
-.leftPane {
+.paneHeader {
     display: flex;
-    flex-direction: column;
-    height: 100%;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.friendlyEditor {
-    height: 50%;
+.paneHeader div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.editorContainer {
-    position: relative;
-    height: 50%;
-    width: 100%;
+.paneHeader div h2, .paneHeader h2 {
+    margin: 0px;
 }
 
-.errorMessage {
-    position: absolute;
-    height: 5%;
-    width: 100%;
-    color: red;
+.runButton {
+    cursor: pointer;
+    padding: 3px 10px;
+    border-radius: 3px;
+    border: 1px solid;
+    margin: 0 10px;
+}
+
+.runButton:hover {
+    background: #049681;
+
 }
 
 .paneContent {
-    border: 1px solid black;
+    height: 90%;
+    background: #00bba1;
+    padding: 5px;
+    border: 1px solid;
     border-radius: 5px;
-    width: 100%;
-    background: #fff;
-    padding: 20px;
-    margin: 3px;
+    overflow: auto;
 }
 
-.editorPaneContent {
-    position: absolute;
-    top: 20px;
-    height: 95%;
+.elementName {
+    cursor: pointer;
+    width: -moz-fit-content;
+    width: fit-content;
+    padding: 3px;
+    border-radius: 3px;
+    border: 1px solid;
+}
+
+.elementName:hover {
+    background: #049681;
+}
+
+.textEditorPaneContent {
+
 }
 
 .errorPaneContent {
-    border: 3px solid red;
-    margin: 0;
+    border: 3px solid;
+    margin: 0;  
+    animation: errorPaneBorderBlink 0.5s step-end infinite;  
 }
 
-.resultPaneContent {
-    height: 800px;
+.errorMessage {
+    color: #1c3a35;
 }
 
-.editor {
-    height: 100%;
-    width: 100%;
+@keyframes errorPaneBorderBlink {    
+    from, to {    
+        border-color: #90f3e5
+    }    
+    50% {    
+        border-color: #1c3a35    
+    }    
+}  
+
+.textEditor {
+    height: 97%;
+    width: 99%;
     resize: none;
     outline: none;
     border: none;
+    background: #00bba1;
+}
+
+.resultPane {
+    height: 90%;
 }
