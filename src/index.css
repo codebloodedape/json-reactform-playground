@@ -49,6 +49,31 @@ body {
     margin: 0px;
 }
 
+.popupFormItem {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+}
+
+.popupButtonsContainer {
+    display: flex;
+    justify-content: center;
+
+}
+
+.popupButton {
+    padding: 4px;
+    border: 1px solid;
+    border-radius: 3px;
+    margin: 0 3px;
+    cursor: pointer;
+}
+
+.popupButton:hover {
+    background: #049681;
+}
+
 .runButton {
     cursor: pointer;
     padding: 3px 10px;
@@ -71,14 +96,26 @@ body {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
+.visualEditorPaneContent {
+    
+}
+
 .elementName {
     cursor: pointer;
-    width: -moz-fit-content;
-    width: fit-content;
+    width: 60%;
     padding: 3px;
     border-radius: 3px;
     border: 1px solid;
-    display: flex;
+    margin: 10px auto;
+    height: 20px;
+    text-align: center;
+
+
+  max-width: 60%;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  overflow: hidden;
 }
 
 .elementName:hover {
@@ -89,6 +126,8 @@ body {
     margin: 0 5px;
     border: 1px solid;
     padding: 0 3px;
+    width: fit-content;
+    float: right;
 }
 
 .elementDeleteButton:hover {

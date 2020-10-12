@@ -124,7 +124,9 @@ class App extends Component {
     delete jsonToForm[elementName]
     this.setState({
       jsonToForm: jsonToForm,
-      jsonToFormString: JSON.stringify(jsonToForm, null, 2)
+      jsonToFormString: JSON.stringify(jsonToForm, null, 2),
+      isJsonValid: true,
+      errorMessage: '',
     })
   }
 
@@ -278,14 +280,14 @@ class App extends Component {
     let editJson = this.state.editJson
 
     let placeHolderElement = editJson.elementProps.placeHolder !== null ? (
-      <label>
+      <label className='popupFormItem'>
         Place Holder
         <input type='text' onChange={this.onPlaceHolderChange} value={editJson.elementProps.placeHolder}></input>
       </label>
     ) : null
 
     return (
-      <div>
+      <div className="paneContent visualEditorPaneContent">
         {this.renderElementsFromJson()}
         <div className="elementName" onClick={this.onAddElementClick}>Add Element</div>
         <Modal
@@ -298,12 +300,12 @@ class App extends Component {
           <div className="paneHeader">
             <h2>Add / Edit Element</h2>
           </div>
-          <label>
+          <label className='popupFormItem'>
             Name
             <input type='text' onChange={this.onElementNameChange} value={editJson.name}></input>
           </label>
           <br />
-          <label>
+          <label className='popupFormItem'>
             Element Type
           <select value={editJson.elementProps.type} onChange={this.onElementTypeChange}>
               <option value="text">Text</option>
@@ -317,7 +319,7 @@ class App extends Component {
             </select>
           </label>
           <br />
-          <label>
+          <label className='popupFormItem'>
             Required
           <select value={editJson.elementProps.required} onChange={this.onRequiredChange}>
               <option value='true'>True</option>
@@ -325,7 +327,7 @@ class App extends Component {
             </select>
           </label>
           <br />
-          <label>
+          <label className='popupFormItem'>
             Disabled
           <select value={editJson.elementProps.disabled} onChange={this.onDisabledChange}>
               <option value='true'>True</option>
@@ -339,9 +341,10 @@ class App extends Component {
           <br />
           {placeHolderElement}
           <br />
-          <button onClick={this.onAddElement}>Done</button>
-          <button onClick={this.onAddElementClose}>Cancel</button>
-
+          <div className='popupButtonsContainer'>
+            <div className='popupButton' onClick={this.onAddElement}>Done</div>
+            <div className='popupButton' onClick={this.onAddElementClose}>Cancel</div>
+          </div>
         </Modal>
       </div>
     )
@@ -353,9 +356,7 @@ class App extends Component {
         <div className="paneHeader">
           <h2>Visual Editor</h2>
         </div>
-        <div className="paneContent">
-          {this.renderVisualEditor()}
-        </div>
+        {this.renderVisualEditor()}
       </div>
     )
   }
